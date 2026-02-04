@@ -1,0 +1,71 @@
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="about-content reveal">
+      <div class="section-header">
+        <div class="section-label">About Me</div>
+        <h2 class="section-title gradient-text">Building the Future</h2>
+      </div>
+      <p class="about-text">
+        As a <span class="highlight">software engineer</span>, I specialize in
+        building scalable and maintainable solutions using modern web
+        technologies. My approach combines <span class="highlight"
+          >technical excellence</span
+        > with a deep understanding of user needs to deliver impactful digital experiences.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding: 8rem 0;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .section-header {
+    margin-bottom: 5rem;
+  }
+  .section-label {
+    color: var(--accent-primary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .about-text {
+    font-size: 1.25rem;
+    line-height: 2;
+    color: var(--text-secondary);
+  }
+
+  .highlight {
+    color: var(--text-primary);
+    font-weight: 700;
+    background: var(--gradient-2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2rem;
+    }
+  }
+</style>
