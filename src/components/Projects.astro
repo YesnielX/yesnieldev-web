@@ -5,11 +5,13 @@ import { projects } from "../data/projects";
 <section id="projects" class="projects-section">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-label">Portfolio</div>
-      <h2 class="section-title">Selected Projects</h2>
+      <div class="section-label">Showcase</div>
+      <h2 class="section-title">
+        Selected <span class="gradient-text">Works</span>
+      </h2>
       <p class="section-description">
-        A collection of professional tools and platforms built with a focus on
-        performance, security, and exceptional user experience.
+        Each project is a unique challenge solved with elegant code and
+        meticulous attention to detail.
       </p>
     </div>
 
@@ -17,10 +19,45 @@ import { projects } from "../data/projects";
       {
         projects.map((project, index) => (
           <div
-            class="project-card reveal"
-            style={`animation-delay: ${index * 0.1}s`}
+            class="project-card glass reveal"
+            style={`animation-delay: ${index * 0.15}s`}
           >
-            <div class="project-content">
+            <div class="project-image-container">
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a
+                    href={project.url || "#"}
+                    class="project-link"
+                    aria-label="View Project"
+                    target={project.url ? "_blank" : undefined}
+                    rel={project.url ? "noopener noreferrer" : undefined}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="icon"
+                    >
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="project-visual">
+                <div
+                  class="visual-gradient"
+                  style={`background: var(--gradient-1); opacity: 0.1;`}
+                />
+                <span class="project-number">0{index + 1}</span>
+                <div class="visual-dots" />
+              </div>
+            </div>
+            <div class="project-info">
               <h3 class="project-title">{project.title}</h3>
               <p class="project-description">{project.description}</p>
               <div class="project-tags">
@@ -33,114 +70,207 @@ import { projects } from "../data/projects";
         ))
       }
     </div>
+
+    <style>
+      .projects-section {
+        padding: 10rem 0;
+        position: relative;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 6rem;
+      }
+
+      .section-label {
+        color: var(--accent-primary);
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        margin-bottom: 1rem;
+      }
+
+      .section-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+      }
+
+      .section-description {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        max-width: 580px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 3rem;
+      }
+
+      .project-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: var(--transition-spring);
+        border-radius: 32px;
+      }
+
+      .project-card:hover {
+        transform: translateY(-12px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+
+      .project-image-container {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/10;
+        overflow: hidden;
+        border-radius: 24px;
+        margin: 1rem;
+        width: calc(100% - 2rem);
+        background: #0f172a;
+      }
+
+      .project-visual {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: var(--transition-smooth);
+      }
+
+      .visual-gradient {
+        position: absolute;
+        inset: 0;
+        filter: blur(40px);
+      }
+
+      .visual-dots {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+          rgba(255, 255, 255, 0.1) 1px,
+          transparent 1px
+        );
+        background-size: 20px 20px;
+        opacity: 0.5;
+      }
+
+      .project-card:hover .project-visual {
+        transform: scale(1.05);
+      }
+
+      .project-number {
+        font-family: var(--font-heading);
+        font-size: 7rem;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.03);
+        letter-spacing: -0.05em;
+        z-index: 1;
+        transition: var(--transition-spring);
+      }
+
+      .project-card:hover .project-number {
+        color: rgba(255, 255, 255, 0.08);
+        transform: translateY(-10px);
+      }
+
+      .project-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(10, 10, 12, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: var(--transition-smooth);
+        z-index: 5;
+        backdrop-filter: blur(8px);
+      }
+
+      .project-card:hover .project-overlay {
+        opacity: 1;
+      }
+
+      .project-link {
+        width: 60px;
+        height: 60px;
+        background: white;
+        color: black;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(30px);
+        transition: var(--transition-spring);
+      }
+
+      .project-card:hover .project-link {
+        transform: translateY(0);
+      }
+
+      .project-link:hover {
+        background: var(--gradient-1);
+        color: white;
+        transform: scale(1.15) rotate(10deg);
+      }
+
+      .icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      .project-info {
+        padding: 1.5rem 2.5rem 2.5rem;
+      }
+
+      .project-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+      }
+
+      .project-description {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-secondary);
+        border-radius: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      @media (max-width: 768px) {
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+        .project-card {
+          min-height: auto;
+        }
+      }
+    </style>
   </div>
 </section>
-
-<style>
-  .projects-section {
-    padding: 10rem 0;
-    background: var(--bg-primary);
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 5rem;
-  }
-
-  .section-label {
-    color: var(--accent-primary);
-    font-size: 0.95rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
-  }
-
-  .section-description {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2rem;
-  }
-
-  .project-card {
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: var(--transition-smooth);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
-    border-color: rgba(99, 102, 241, 0.2);
-  }
-
-  .project-title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
-  }
-
-  .project-description {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-  }
-
-  .project-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .tag {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.4rem 0.8rem;
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-    border-radius: 100px;
-    border: 1px solid var(--border-color);
-    transition: var(--transition-smooth);
-  }
-
-  .project-card:hover .tag {
-    border-color: rgba(99, 102, 241, 0.2);
-    color: var(--accent-primary);
-  }
-
-  @media (max-width: 768px) {
-    .projects-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .project-card {
-      padding: 2rem;
-    }
-  }
-</style>

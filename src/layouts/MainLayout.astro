@@ -23,16 +23,111 @@ const { title, description = "Software Engineer Portfolio" } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="main-body">
     <Background />
     <Navbar />
     <main>
       <slot />
     </main>
     <Footer />
+
+    <canvas
+      id="matrix-canvas"
+      style="display: none; position: fixed; inset: 0; z-index: -1; opacity: 0.15; pointer-events: none;"
+    ></canvas>
+
+    <script>
+      // Magnetic Effect
+      const magneticElements = document.querySelectorAll(".magnetic");
+
+      magneticElements.forEach((el) => {
+        el.addEventListener("mousemove", (e) => {
+          const mouseEvent = e as MouseEvent;
+          const rect = el.getBoundingClientRect();
+          const x = mouseEvent.clientX - rect.left - rect.width / 2;
+          const y = mouseEvent.clientY - rect.top - rect.height / 2;
+
+          (el as HTMLElement).style.transform =
+            `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+
+        el.addEventListener("mouseleave", () => {
+          (el as HTMLElement).style.transform = `translate(0px, 0px)`;
+        });
+      });
+
+      // Matrix Mode Easter Egg
+      let matrixActive = false;
+      const canvas = document.getElementById(
+        "matrix-canvas",
+      ) as HTMLCanvasElement;
+      const ctx = canvas?.getContext("2d");
+
+      function runMatrix() {
+        if (!canvas || !ctx) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars =
+          "ABCDEFHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops: number[] = [];
+
+        for (let i = 0; i < columns; i++) drops[i] = 1;
+
+        function draw() {
+          if (!matrixActive) return;
+          ctx!.fillStyle = "rgba(0, 0, 0, 0.05)";
+          ctx!.fillRect(0, 0, canvas.width, canvas.height);
+          ctx!.fillStyle = "#0F0";
+          ctx!.font = fontSize + "px monospace";
+
+          for (let i = 0; i < drops.length; i++) {
+            const text = chars.charAt(Math.floor(Math.random() * chars.length));
+            ctx!.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+              drops[i] = 0;
+            drops[i]++;
+          }
+          requestAnimationFrame(draw);
+        }
+        draw();
+      }
+
+      window.addEventListener("toggle-matrix", () => {
+        matrixActive = !matrixActive;
+        if (canvas) {
+          canvas.style.display = matrixActive ? "block" : "none";
+          if (matrixActive) {
+            document.body.classList.add("matrix-mode");
+            runMatrix();
+          } else {
+            document.body.classList.remove("matrix-mode");
+          }
+        }
+      });
+    </script>
+
+    <style is:global>
+      .matrix-mode {
+        --accent-primary: #00ff00 !important;
+        --accent-secondary: #008f11 !important;
+        --gradient-1: linear-gradient(
+          135deg,
+          #00ff00 0%,
+          #008f11 100%
+        ) !important;
+        background-color: #000 !important;
+      }
+
+      .matrix-mode * {
+        text-shadow: 0 0 5px #00ff00 !important;
+      }
+    </style>
   </body>
 </html>

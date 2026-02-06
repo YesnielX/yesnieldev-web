@@ -5,11 +5,13 @@ import { skills } from "../data/skills";
 <section id="skills" class="skills-section">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-label">Tech Stack</div>
-      <h2 class="section-title">Skills & Technologies</h2>
+      <div class="section-label">Expertise</div>
+      <h2 class="section-title">
+        My <span class="gradient-text">Tech Stack</span>
+      </h2>
       <p class="section-description">
-        A comprehensive toolkit for building modern, scalable, and
-        high-performance applications
+        I use the latest and most efficient tools to build high-performance
+        products that users love.
       </p>
     </div>
   </div>
@@ -18,13 +20,16 @@ import { skills } from "../data/skills";
     <div class="carousel-track">
       {
         skills.map((skill) => (
-          <div class="skill-card">
-            <img
-              src={skill.icon}
-              alt={skill.name}
-              class="skill-icon"
-              loading="lazy"
-            />
+          <div class="skill-card glass">
+            <div class="skill-icon-bg">
+              <img
+                src={skill.icon}
+                alt={skill.name}
+                class="skill-icon"
+                loading="lazy"
+              />
+              <div class="icon-glow" />
+            </div>
             <div class="skill-name">{skill.name}</div>
           </div>
         ))
@@ -32,150 +37,186 @@ import { skills } from "../data/skills";
       {/* Duplicate for infinite effect */}
       {
         skills.map((skill) => (
-          <div class="skill-card">
-            <img
-              src={skill.icon}
-              alt={skill.name}
-              class="skill-icon"
-              loading="lazy"
-            />
+          <div class="skill-card glass">
+            <div class="skill-icon-bg">
+              <img
+                src={skill.icon}
+                alt={skill.name}
+                class="skill-icon"
+                loading="lazy"
+              />
+              <div class="icon-glow" />
+            </div>
             <div class="skill-name">{skill.name}</div>
           </div>
         ))
       }
     </div>
   </div>
-</section>
 
-<style>
-  .skills-section {
-    padding: 8rem 0;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 5rem;
-  }
-
-  .section-label {
-    color: var(--accent-primary);
-    font-size: 0.95rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-  }
-
-  .section-description {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  /* Infinite Carousel */
-  .carousel-container {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    padding: 2rem 0;
-  }
-
-  .carousel-track {
-    display: flex;
-    gap: 2rem;
-    animation: scroll 40s linear infinite;
-    width: max-content;
-  }
-
-  .carousel-track:hover {
-    animation-play-state: paused;
-  }
-
-  @keyframes scroll {
-    0% {
-      transform: translateX(0);
+  <style>
+    .skills-section {
+      padding: 10rem 0;
+      position: relative;
+      overflow: hidden;
     }
-    100% {
-      transform: translateX(-50%);
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 6rem;
     }
-  }
 
-  .skill-card {
-    background: white;
-    border: 2px solid var(--border-color);
-    border-radius: 20px;
-    padding: 2rem 2.5rem;
-    min-width: 180px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    transition: var(--transition-smooth);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
+    .section-label {
+      color: var(--accent-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 1rem;
+    }
 
-  .skill-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--gradient-1);
-    transform: scaleX(0);
-    transition: var(--transition-smooth);
-  }
+    .section-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
 
-  .skill-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--accent-primary);
-    box-shadow: var(--shadow-lg);
-  }
+    .section-description {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
 
-  .skill-card:hover::before {
-    transform: scaleX(1);
-  }
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      padding: 2rem 0;
+    }
 
-  .skill-icon {
-    width: 64px;
-    height: 64px;
-    object-fit: contain;
-    transition: var(--transition-smooth);
-  }
+    .carousel-container::before,
+    .carousel-container::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 200px;
+      z-index: 2;
+      pointer-events: none;
+    }
 
-  .skill-card:hover .skill-icon {
-    transform: scale(1.1) rotate(5deg);
-  }
+    .carousel-container::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg-primary), transparent);
+    }
 
-  .skill-name {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-align: center;
-  }
+    .carousel-container::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg-primary), transparent);
+    }
 
-  @media (max-width: 768px) {
+    .carousel-track {
+      display: flex;
+      gap: 2.5rem;
+      animation: scroll-track 40s linear infinite;
+      width: max-content;
+    }
+
+    .carousel-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scroll-track {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
     .skill-card {
-      min-width: 150px;
-      padding: 1.5rem 2.2rem;
+      min-width: 154px;
+      padding: 2.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      transition: var(--transition-spring);
+      cursor: pointer;
     }
+
+    .skill-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .skill-icon-bg {
+      width: 72px;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: var(--transition-smooth);
+    }
+
+    .icon-glow {
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-1);
+      border-radius: inherit;
+      filter: blur(15px);
+      opacity: 0;
+      transition: var(--transition-smooth);
+      z-index: -1;
+    }
+
+    .skill-card:hover .icon-glow {
+      opacity: 0.4;
+    }
+
+    .skill-card:hover .skill-icon-bg {
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.1) rotate(5deg);
+    }
+
     .skill-icon {
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      filter: grayscale(1) opacity(0.5);
+      transition: var(--transition-smooth);
     }
-  }
-</style>
+
+    .skill-card:hover .skill-icon {
+      filter: grayscale(0) opacity(1);
+      transform: scale(1.1);
+    }
+
+    .skill-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      transition: var(--transition-smooth);
+      letter-spacing: 0.02em;
+    }
+
+    .skill-card:hover .skill-name {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 768px) {
+      .carousel-container::before,
+      .carousel-container::after {
+        width: 100px;
+      }
+    }
+  </style>
+</section>

@@ -2,13 +2,15 @@ export interface Project {
   title: string;
   description: string;
   tags: string[];
+  url?: string;
 }
 
 export const projects: Project[] = [
   {
-    title: "Estrella Millonaria",
-    description: "A referral management system offering economic rewards based on an innovative and transparent model. Includes profit route systems, an admin panel, support for Web3 payment integration, and a modern architecture.",
-    tags: ["Next.js", "Supabase", "Web3", "TailwindCSS"],
+    title: "Auto Translate Bot",
+    description: "Powerful Discord bot for real-time automatic message translation. Features advanced configuration, multi-language support, and global community scaling.",
+    tags: ["Node.js", "Discord.js", "Translations", "API"],
+    url: "http://auto-translate.yesnieldev.com/",
   },
   {
     title: "GestioDrive",
@@ -29,10 +31,5 @@ export const projects: Project[] = [
     title: "OpticaDesk",
     description: "Modern application for optometry clinics, featuring patient management, medical consultations, and prescriptions. Local storage focused on privacy.",
     tags: ["React", "SQLite", "TailwindCSS"],
-  },
-  {
-    title: "Auto Translate Bot",
-    description: "Powerful Discord bot for real-time automatic message translation. Features advanced configuration, multi-language support, and global community scaling.",
-    tags: ["Node.js", "Discord.js", "Translations", "API"],
   }
 ];
