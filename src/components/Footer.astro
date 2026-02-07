@@ -79,22 +79,30 @@ import LiveStatus from "./LiveStatus.astro";
       </p>
       <div class="footer-meta">
         <span>Built with Astro & Vanilla CSS</span>
-        <button
-          id="matrix-toggle"
-          class="matrix-btn"
-          aria-label="Toggle Matrix Mode"
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            ><polyline points="16 18 22 12 16 6"></polyline><polyline
-              points="8 6 2 12 8 18"></polyline></svg
+        <div class="matrix-wrapper">
+          <button
+            id="matrix-toggle"
+            class="matrix-btn magnetic"
+            aria-label="Toggle Matrix Mode"
           >
-        </button>
+            <span class="matrix-tooltip">System Entry</span>
+            <div class="matrix-icon-container">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                class="matrix-svg"
+                ><polyline points="16 18 22 12 16 6"></polyline><polyline
+                  points="8 6 2 12 8 18"></polyline></svg
+              >
+              <div class="matrix-scanline"></div>
+            </div>
+            <div class="matrix-glow"></div>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -252,22 +260,149 @@ import LiveStatus from "./LiveStatus.astro";
     gap: 1rem;
   }
 
+  .matrix-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
   .matrix-btn {
-    background: none;
-    border: none;
-    color: inherit;
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
     cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 4px;
-    transition: var(--transition-smooth);
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: visible;
+  }
+
+  .matrix-icon-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  .matrix-svg {
+    transition: transform 0.3s ease;
+  }
+
+  .matrix-tooltip {
+    position: absolute;
+    bottom: 140%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #00ff00;
+    color: black;
+    font-family: monospace;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+  }
+
+  .matrix-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #00ff00;
+  }
+
+  .matrix-glow {
+    position: absolute;
+    inset: -2px;
+    background: #00ff00;
+    border-radius: 14px;
+    opacity: 0;
+    filter: blur(15px);
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .matrix-scanline {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(0, 255, 0, 0.4),
+      transparent
+    );
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Keyframe for scanline */
+  @keyframes scanner {
+    0% {
+      top: -100%;
+    }
+    100% {
+      top: 200%;
+    }
   }
 
   .matrix-btn:hover {
     color: #00ff00;
+    border-color: #00ff00;
+    transform: scale(1.1);
+    background: rgba(0, 255, 0, 0.05);
+  }
+
+  .matrix-btn:hover .matrix-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .matrix-btn:hover .matrix-glow {
+    opacity: 0.3;
+  }
+
+  .matrix-btn:hover .matrix-svg {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px #00ff00);
+  }
+
+  .matrix-btn:hover .matrix-scanline {
+    opacity: 1;
+    animation: scanner 1.5s linear infinite;
+  }
+
+  /* Active state when Matrix is ON */
+  :global(.matrix-mode) .matrix-btn {
+    border-color: #00ff00;
+    color: #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
     background: rgba(0, 255, 0, 0.1);
+  }
+
+  :global(.matrix-mode) .matrix-glow {
+    opacity: 0.2;
+    filter: blur(10px);
   }
 
   @media (max-width: 768px) {
@@ -301,9 +436,43 @@ import LiveStatus from "./LiveStatus.astro";
 
 <script>
   const matrixToggle = document.getElementById("matrix-toggle");
-  if (matrixToggle) {
+  const matrixGlow = document.querySelector(".matrix-glow") as HTMLElement;
+
+  if (matrixToggle && matrixGlow) {
     matrixToggle.addEventListener("click", () => {
       window.dispatchEvent(new CustomEvent("toggle-matrix"));
+    });
+
+    // Proximity effect
+    document.addEventListener("mousemove", (e) => {
+      const rect = matrixToggle.getBoundingClientRect();
+      const buttonCenterX = rect.left + rect.width / 2;
+      const buttonCenterY = rect.top + rect.height / 2;
+
+      const distance = Math.hypot(
+        e.clientX - buttonCenterX,
+        e.clientY - buttonCenterY,
+      );
+      const proximityRange = 300;
+
+      if (distance < proximityRange) {
+        const intensity = 1 - distance / proximityRange;
+        const glowOpacity = intensity * 0.5;
+        matrixGlow.style.opacity = glowOpacity.toString();
+        matrixGlow.style.filter = `blur(${15 - intensity * 10}px)`;
+
+        if (intensity > 0.8) {
+          matrixToggle.style.borderColor = "#00ff00";
+          matrixToggle.style.boxShadow = `0 0 ${intensity * 20}px rgba(0, 255, 0, 0.4)`;
+        } else {
+          matrixToggle.style.borderColor = `rgba(0, 255, 0, ${intensity * 0.5})`;
+          matrixToggle.style.boxShadow = "none";
+        }
+      } else {
+        matrixGlow.style.opacity = "0";
+        matrixToggle.style.borderColor = "";
+        matrixToggle.style.boxShadow = "none";
+      }
     });
   }
 </script>
